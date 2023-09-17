@@ -8,7 +8,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./front:/app:cached
+      - ./front:/app:delegated
     stdin_open: true
     tty: true
     depends_on:
@@ -21,7 +21,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./api:/app:cached
+      - ./api:/app:delegated
     tty: true
     depends_on:
       - api
@@ -30,7 +30,7 @@ services:
       context: ./.docker/api
       dockerfile: Dockerfile
     volumes:
-      - ./api:/app:cached
+      - ./api:/app:delegated
     tty: true
     environment:
       - APP_ENV=development
@@ -49,7 +49,7 @@ services:
       MYSQL_ROOT_PASSWORD: sample
       TZ: "Asia/Tokyo"
     volumes:
-      - db-volume:/var/lib/mysql:cached
+      - db-volume:/var/lib/mysql:delegated
 
 volumes:
   db-volume:
