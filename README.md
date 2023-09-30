@@ -1,1 +1,1 @@
-# Next.js×Laravelで開発する簡易アプリケーションのハンズオン
+Next.js×Laravelの練習
