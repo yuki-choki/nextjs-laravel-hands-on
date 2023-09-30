@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Memo;
 use App\Http\Requests\MemoPostRequest;
+use App\Http\Resources\MemoResource;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 
 class MemoController extends Controller
 {
@@ -14,7 +18,19 @@ class MemoController extends Controller
      */
     public function fetch(): AnonymousResourceCollection
     {
-        // 処理
+        // ログインユーザーのID取得
+        $id = Auth::id();
+        if (!$id) {
+            throw new Exception('未ログインです。');
+        }
+
+        try {
+            $memos = Memo::where('user_id', $id)->get();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        return MemoResource::collection($memos);
     }
 
     /**
