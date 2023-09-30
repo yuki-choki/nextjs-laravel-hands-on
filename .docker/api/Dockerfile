@@ -13,7 +13,8 @@ RUN apk update && \
 		zip \
 		unzip \
 		vim \
-		autoconf gcc g++ make
+		autoconf gcc g++ make \
+		linux-headers
 
 # add php-extention-module & xdebug
 RUN docker-php-ext-install mbstring pdo_mysql bcmath && \

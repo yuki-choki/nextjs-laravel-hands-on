@@ -25,7 +25,7 @@ axios:
 
 # laravel
 sanctum:
-	docker-compose exec api composer require laravel/sanctum
+	docker-compose exec api composer require laravel/sanctum:2.11
 	docker-compose exec api php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 
 route:
