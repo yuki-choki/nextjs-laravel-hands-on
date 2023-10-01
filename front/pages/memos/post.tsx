@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { axiosApi } from '../../lib/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import { useUserState } from '../../atoms/userAtom';
+import { useAuth } from '../../hooks/useAuth';
 
 type MemoForm = {
   title: string;
@@ -20,7 +20,7 @@ type ApiErrorResponse = {
 
 const Post: NextPage = () => {
   const router = useRouter();
-  const { user } = useUserState();
+  const { checkLoggedIn } = useAuth();
   const [memoForm, setMemoForm] = useState<MemoForm>({
     title: '',
     body: '',
@@ -32,11 +32,14 @@ const Post: NextPage = () => {
   const [validation, setValidation] = useState<MemoForm>(initialValidationValues);
 
 useEffect(() => {
-  if (!user) {
-    router.push('/');
-    return;
-  }
-}, [user, router]);
+  const init = async () => {
+    const res = await checkLoggedIn();
+    if (!res) {
+      router.push('/');
+    }
+  };
+  init();
+}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateMemoForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setMemoForm({ ...memoForm, [e.target.name]: e.target.value });
