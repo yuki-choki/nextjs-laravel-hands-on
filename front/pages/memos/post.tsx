@@ -1,9 +1,10 @@
 import type { NextPage } from 'next';
 import { RequiredMark } from '../../components/RequiredMark';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { axiosApi } from '../../lib/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
+import { useUserState } from '../../atoms/userAtom';
 
 type MemoForm = {
   title: string;
@@ -19,6 +20,7 @@ type ApiErrorResponse = {
 
 const Post: NextPage = () => {
   const router = useRouter();
+  const { user } = useUserState();
   const [memoForm, setMemoForm] = useState<MemoForm>({
     title: '',
     body: '',
@@ -28,6 +30,13 @@ const Post: NextPage = () => {
     body: '',
   };
   const [validation, setValidation] = useState<MemoForm>(initialValidationValues);
+
+useEffect(() => {
+  if (!user) {
+    router.push('/');
+    return;
+  }
+}, [user, router]);
 
   const updateMemoForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setMemoForm({ ...memoForm, [e.target.name]: e.target.value });
